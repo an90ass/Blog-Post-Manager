@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash,request,redirect, url_for
 from Databases import add_user_to_db, delete_post_from_db, delete_user_from_db, get_all_users, get_all_posts, get_post, get_user_by_user_name, get_user_info, pw_to_chek_in_db, update_post_in_db, update_user_in_db,add_post
-from FlaskForms import LoginForm, NamerForm, PasswordForm, UserForm ,PostForm
+from WebForms import LoginForm, NamerForm, PasswordForm, UserForm ,PostForm
 from Models import db, migrate, login_manager
 from werkzeug.security import check_password_hash
 from datetime import date, datetime
@@ -73,6 +73,7 @@ def add_user():
 
 
 @app.route('/update/<int:id>',methods=['GET','POST'])
+@login_required
 def update_user(id):
     form = UserForm()
     user_info = get_user_info(id)
@@ -82,21 +83,24 @@ def update_user(id):
             update_user_in_db(form,user_info)
             # name = form.name.data =''
             flash("User updated successfully")
-            return render_template("update.html",
+            return render_template("update_user.html",
                                     form=form,
-                                   user_info=user_info)
+                                   user_info=user_info,
+                                   id=id)
             # our_users = get_all_users()
             # return render_template("add_user.html", form=form, name=name , our_users=our_users)
 
         except Exception as e:
             flash("Error ! ")
-            return render_template("update.html",
+            return render_template("update_user.html",
                                     form=form,
-                                   user_info=user_info)
+                                   user_info=user_info,
+                                   id=id)
     else:
-        return render_template("update.html",
+        return render_template("update_user.html",
                                     form=form,
-                                   user_info=user_info)
+                                   user_info=user_info,
+                                   id=id)
 @app.route('/delete/<int:id>')
 def delete_user(id):
     name = None
@@ -153,10 +157,12 @@ def get_current_date():
 
 # Add Post Page
 @app.route('/add-post', methods=['GET', 'POST'])
+@login_required
 def add_post_route():
     form = PostForm()
     if form.validate_on_submit():
-        add_post(form)
+        poster = current_user.id
+        add_post(form,poster)
         form.title.data = ''
         form.content.data = ''
         form.author.data = ''
@@ -176,6 +182,7 @@ def post(id):
     return render_template("post.html", post=post)
 
 @app.route('/posts/edit/<int:id>',methods=['GET','POST'])
+@login_required
 def update_post(id):
     form = PostForm()
     post = get_post(id)
@@ -187,7 +194,6 @@ def update_post(id):
         except Exception as e:
             print(e)
     form.title.data = post.title
-    form.author.data = post.author
     form.slug.data = post.slug
     form.content.data = post.content
     return render_template("update_post.html",form=form)
@@ -227,6 +233,30 @@ def login():
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+    form = UserForm()
+    id = current_user.id
+    user_info = get_user_info(id)
+    print(user_info)
+    if request.method =="POST":
+        try:
+            update_user_in_db(form,user_info)
+            # name = form.name.data =''
+            flash("User updated successfully")
+            return render_template("dashboard.html",
+                                    form=form,
+                                   user_info=user_info)
+            # our_users = get_all_users()
+            # return render_template("add_user.html", form=form, name=name , our_users=our_users)
+
+        except Exception as e:
+            flash("Error ! ")
+            return render_template("dashboard.html",
+                                    form=form,
+                                   user_info=user_info)
+    else:
+        return render_template("dashboard.html",
+                                    form=form,
+                                   user_info=user_info)
     return render_template("dashboard.html")
     
 

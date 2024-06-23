@@ -9,7 +9,7 @@ class NamerForm(FlaskForm):
 
 class UserForm(FlaskForm):
     name = StringField("Enter Your Name",validators=[DataRequired()])
-    user_name = StringField("Enter The User Name",validators=[DataRequired()])
+    user_name = StringField("Enter User Name",validators=[DataRequired()])
     email= StringField("Enter Your Email",validators=[DataRequired()])
     favorite_color = StringField("Enter Your Favoraite Color")
     password_hash = PasswordField("Enter Your Password",validators=[DataRequired(),EqualTo('password_hash2',message='Passwords Must Match')])
@@ -24,7 +24,7 @@ class PasswordForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField("Title",validators=[DataRequired()])
     content = StringField("Content",validators=[DataRequired()],widget=TextArea())
-    author = StringField("Author",validators=[DataRequired()])
+    author = StringField("Author")
     slug = StringField("Slug",validators=[DataRequired()])
     submit = SubmitField("Submit")
 

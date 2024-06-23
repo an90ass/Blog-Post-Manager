@@ -32,7 +32,8 @@ def get_user_info(id):
     return user_info
 
 def update_user_in_db(form,user_info):
-    user_info.user_name = form.name.data
+    user_info.user_name = form.user_name.data
+    user_info.name = form.name.data
     user_info.email = form.email.data
     user_info.favorite_color = form.favorite_color.data
     db.session.commit()
@@ -44,8 +45,8 @@ def pw_to_chek_in_db(email):
     user = Users.query.filter_by(email=email).first()
     return user
 
-def add_post(form):
-     post = Posts(title = form.title.data,content=form.content.data,author=form.author.data,slug =form.slug.data)
+def add_post(form,poster):
+     post = Posts(title = form.title.data,content=form.content.data,poster_id=poster,slug =form.slug.data)
      try:
         # Add post data to the DataBase
         db.session.add(post)
@@ -64,7 +65,6 @@ def get_post(id):
 
 def update_post_in_db(form,post):
     post.title = form.title.data
-    post.author = form.author.data
     post.slug = form.slug.data
     post.content = form.content.data
     # Update db

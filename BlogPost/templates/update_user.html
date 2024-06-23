@@ -10,16 +10,18 @@
 </div>
 {% endfor %}
 
-{% if name %}
-    <h1>Update user!</h1>
-{% else %}
+{% if id == current_user.id %}
     <h1>Update user : </h1>
-    <br/>
+    <br/>    
+  
     <form action="/update/{{
         user_info.id}}" method="post">
         {{ form.hidden_tag() }}
         {{ form.name.label(class="form-label") }}
-        {{ form.name(class="form-control", value= user_info.user_name )}}
+        {{ form.name(class="form-control", value= user_info.name )}}
+        <br/>
+        {{ form.user_name.label(class="form-label") }}
+        {{ form.user_name(class="form-control", value= user_info.user_name )}}
         <br/>
         {{ form.email.label(class="form-label") }}
         {{ form.email(class="form-control", value= user_info.email) }}
@@ -31,5 +33,14 @@
         {{ form.submit(class="btn btn-outline-success") }}
     </form>
     <br/><br/><br/>
+{% else %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        You Can't Edit This User...
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>   
+    <h1>Access Denied !!..</h1>
+    <p>Sorry, you can't access this user profile </p>
 {% endif %}
 {% endblock %}

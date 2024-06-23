@@ -22,6 +22,9 @@ class Users(db.Model,UserMixin):
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     # Do some password stuff!
     password_hash = db.Column(db.String(512))
+    # User Can have many posts
+    posts = db.relationship('Posts',backref='poster')
+
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute!')
@@ -41,9 +44,11 @@ class Posts(db.Model):
         id = db.Column(db.Integer,primary_key = True)
         title = db.Column(db.String(255))
         content = db.Column(db.Text)
-        author = db.Column(db.String(255))
+        # author = db.Column(db.String(255))
         date_posted = db.Column(db.DateTime, default=datetime.utcnow)  # Corrected typo here
         slug = db.Column(db.String(255))
+        # Foreign Key to link Users (refer to the primary key of the user)
+        poster_id = db.Column(db.Integer,db.ForeignKey('users.id'))
 
     
 

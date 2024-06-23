@@ -2,7 +2,7 @@
 
 {% block content %}
 {% for message in get_flashed_messages() %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
     {{ message }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -26,12 +26,13 @@
                 <p class="card-text">
                     <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                 </p>
-                <a href="{{ url_for('post',id=post.id) }}" class="card-link text-primary">Read more</a>
+                <a href="{{ url_for('post',id=post.id) }}" class="card-link text-primary">Read more..</a>
                 <br/>
                 <br/>
-                <br/>
-                <a href="{{ url_for('update_post',id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edite Post </a>
-                <a href="{{ url_for('delete_post',id=post.id) }}" class="btn btn-outline-danger btn-sm">Delete Post </a>
+                {% if post.poster_id == current_user.id %}
+                    <a href="{{ url_for('update_post',id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edite Post </a>
+                    <a href="{{ url_for('delete_post',id=post.id) }}" class="btn btn-outline-danger btn-sm">Delete Post </a>
+                {% endif %}
 
 
             </div>

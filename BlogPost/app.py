@@ -173,7 +173,6 @@ def add_post_route():
 @app.route('/posts')
 def posts():
     posts = get_all_posts()
-    # print(posts)
     return render_template("posts.html",posts=posts)
 
 @app.route('/post/<int:id>')
@@ -186,6 +185,8 @@ def post(id):
 def update_post(id):
     form = PostForm()
     post = get_post(id)
+    posts = get_all_posts()
+
     if request.method =="POST":
         try:
             update_post_in_db(form,post)
@@ -193,22 +194,33 @@ def update_post(id):
             return redirect(url_for('post', id=post.id))
         except Exception as e:
             print(e)
-    form.title.data = post.title
-    form.slug.data = post.slug
-    form.content.data = post.content
-    return render_template("update_post.html",form=form)
+    if current_user.id == post.poster_id:
+        form.title.data = post.title
+        form.slug.data = post.slug
+        form.content.data = post.content
+        return render_template("update_post.html",form=form)
+    else:
+        flash("You Aren't Authorized To Edit That Post")
+        return render_template("posts.html",posts=posts)
         
 @app.route('/posts/delete/<int:id>')
+@login_required
 def delete_post(id):
-    post = get_post(id)
-    try:
-        delete_post_from_db(post)
-        flash("Post Deleted Successfully")
-        posts = get_all_posts()
-    # print(posts)
+    post_to_delete = get_post(id)
+    current_user_id = current_user.id
+    posts = get_all_posts()
+
+    if current_user_id == post_to_delete.poster.id:
+        try:
+            delete_post_from_db(post_to_delete)
+            flash("Post Deleted Successfully")
+            return render_template("posts.html",posts=posts)
+        except Exception as e:
+            flash("There was a porblem deleting post !")
+    else:
+        flash("You Aren't Authorized To Delete That Post")
         return render_template("posts.html",posts=posts)
-    except Exception as e:
-        flash("There was a porblem deleting post !")
+
 
 # Create login page
 @app.route('/login',methods=['GET','POST'])

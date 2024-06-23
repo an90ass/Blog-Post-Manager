@@ -76,9 +76,16 @@ def delete_post_from_db(post):
         db.session.commit()
     except Exception as e:
         flash("There was a porblem deleting post !")
+
 def get_user_by_user_name(user_name):
     return Users.query.filter_by(user_name=user_name).first()
     
+def all_posts():
+    return Posts.query
+def searched_posts(posts,search):
+    posts = posts.filter(Posts.content.like('%' + search + '%'))
+    return posts.order_by(Posts.title).all()
+
 
     
 

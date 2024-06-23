@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash,request,redirect, url_for
-from Databases import add_user_to_db, delete_post_from_db, delete_user_from_db, get_all_users, get_all_posts, get_post, get_user_by_user_name, get_user_info, pw_to_chek_in_db, update_post_in_db, update_user_in_db,add_post
-from WebForms import LoginForm, NamerForm, PasswordForm, UserForm ,PostForm
+from Databases import add_user_to_db, delete_post_from_db, delete_user_from_db, get_all_users, get_all_posts, get_post, get_user_by_user_name, get_user_info, pw_to_chek_in_db, searched_posts, update_post_in_db, update_user_in_db,add_post,all_posts
+from WebForms import LoginForm, NamerForm, PasswordForm, SearchForm, UserForm ,PostForm
 from Models import db, migrate, login_manager
 from werkzeug.security import check_password_hash
 from datetime import date, datetime
@@ -269,7 +269,7 @@ def dashboard():
         return render_template("dashboard.html",
                                     form=form,
                                    user_info=user_info)
-    return render_template("dashboard.html")
+    # return render_template("dashboard.html")
     
 
 # Create Logout page
@@ -279,6 +279,24 @@ def logout():
     logout_user()
     flash('You Have Been Logged Out - Thanks For Stopping By ..!!')
     return redirect(url_for('login'))
+
+#  Create Search Function
+@app.route('/search', methods=['POST'])
+def search():
+    form = SearchForm()
+    posts = all_posts()
+    if form.validate_on_submit():
+        post.searched = form.searched.data 
+
+        filtered_posts = searched_posts(posts,post.searched) 
+        return render_template("search.html", form=form, searched=form.searched.data,filtered_posts=filtered_posts)
+    return render_template("search.html", form=form, searched="You didn't do the search")
+
+# Pass Stuff to Navbar
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
 
 
 

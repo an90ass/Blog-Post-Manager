@@ -82,9 +82,14 @@ def get_user_by_user_name(user_name):
     
 def all_posts():
     return Posts.query
-def searched_posts(posts,search):
-    posts = posts.filter(Posts.content.like('%' + search + '%'))
-    return posts.order_by(Posts.title).all()
+def searched_posts(posts, search):
+    filtered_posts = posts.filter(
+        (Posts.title.like('%' + search + '%')) | 
+        (Posts.content.like('%' + search + '%')) | 
+        (Users.user_name.like('%' + search + '%'))
+    ).join(Users).order_by(Posts.title).all()
+    return filtered_posts
+
 
 
     

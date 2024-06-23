@@ -4,7 +4,8 @@ from WebForms import LoginForm, NamerForm, PasswordForm, SearchForm, UserForm ,P
 from Models import db, migrate, login_manager
 from werkzeug.security import check_password_hash
 from datetime import date, datetime
-from flask_login import UserMixin,login_user,LoginManager,login_required,logout_user,current_user
+from flask_login import login_user,login_required,logout_user,current_user
+from flask_ckeditor import CKEditor
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "hi"
 # Old SQLITE DB
@@ -17,7 +18,8 @@ app.config['DEBUG'] = True
 
 db.init_app(app)  # Initialize the db with the app
 migrate.init_app(app,db)  # Initialize the migrate with the app
-login_manager.init_app(app)
+login_manager.init_app(app) # Initialize the login_manager with the app
+ckeditor = CKEditor(app) # Initialize the CKEditor with the app
 
 
 @app.route('/')
@@ -165,7 +167,6 @@ def add_post_route():
         add_post(form,poster)
         form.title.data = ''
         form.content.data = ''
-        form.author.data = ''
         form.slug.data = ''
         flash("Blog Post Submitted Successfully!")
     return render_template("add_post.html", form=form)
@@ -287,7 +288,6 @@ def search():
     posts = all_posts()
     if form.validate_on_submit():
         post.searched = form.searched.data 
-
         filtered_posts = searched_posts(posts,post.searched) 
         return render_template("search.html", form=form, searched=form.searched.data,filtered_posts=filtered_posts)
     return render_template("search.html", form=form, searched="You didn't do the search")

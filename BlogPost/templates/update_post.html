@@ -9,7 +9,7 @@
     </button>
 </div>
 {% endfor %}
-<h1>Add Blog Post :</h1>
+<h1>Edit Post :</h1>
 <br/>
 <form method="post" class="form">
     {{ form.hidden_tag() }}
@@ -29,6 +29,8 @@
    
     <button type="submit" class="btn btn-outline-success">{{ form.submit.label.text }}</button>
 </form>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='content') }}
 <br/><br/><br/>
 
 {% endblock %}

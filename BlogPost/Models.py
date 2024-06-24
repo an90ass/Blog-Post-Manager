@@ -8,7 +8,6 @@ db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 login_manager.login_view='login'
-
 @login_manager.user_loader
 def load_user(user_id):
      return Users.query.get(int(user_id))
@@ -21,10 +20,12 @@ class Users(db.Model,UserMixin):
     favorite_color = db.Column(db.String(120))
     about_author =  db.Column(db.Text(500),nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    profile_pic = db.Column(db.Text(500), nullable=True)
+
     # Do some password stuff!
     password_hash = db.Column(db.String(512))
     # User Can have many posts
-    posts = db.relationship('Posts',backref='poster')
+    posts = db.relationship('Posts',backref='poster', cascade="all, delete-orphan")
 
     @property
     def password(self):

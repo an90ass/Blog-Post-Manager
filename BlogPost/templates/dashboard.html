@@ -26,6 +26,8 @@
                         <strong>User Id: </strong>{{ current_user.email }}<br/>
                         <strong>Favorite Color: </strong>{{ current_user.favorite_color }}<br/>
                         <strong>About Author : </strong>{{ current_user.about_author }}<br/>
+                        <strong>Profile pic : </strong>{{ current_user.profile_pic }}<br/>
+
                         <strong>Date Joined: </strong>{{ current_user.date_added }}<br/>
                     </p>
                     <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Log out</a>
@@ -47,7 +49,7 @@
         Edit Profile
     </div>
     <div class="card-body">
-        <form action="/dashboard" method="post">
+        <form action="/dashboard" method="post" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="mb-3">
                 {{ form.name.label(class="form-label") }}
@@ -69,6 +71,10 @@
           
           <textarea name="about_author" class="form-control">{{ user_info.about_author}}</textarea>
           <br/>
+          <div class="mb-3">
+            {{ form.profile_pic.label(class="form-label") }}
+            {{ form.profile_pic(class="form-control", value=user_info.email) }}
+        </div><br/>
             {{ form.submit(class="btn btn-outline-success btn-sm") }}
         </form>
     </div>

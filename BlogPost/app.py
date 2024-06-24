@@ -20,7 +20,8 @@ db.init_app(app)  # Initialize the db with the app
 migrate.init_app(app,db)  # Initialize the migrate with the app
 login_manager.init_app(app) # Initialize the login_manager with the app
 ckeditor = CKEditor(app) # Initialize the CKEditor with the app
-
+# UPLOAD_FOLDER = 'static/images/'
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -29,9 +30,9 @@ def index():
     stuff = 'This is the Home Page'
     return render_template('index.html', first_name=first_name, stuff=stuff)
 
-@app.route('/user/<name>')
-def user(name):
-    return render_template('user.html', user_name=name)
+# @app.route('/user/<name>')
+# def user(name):
+#     return render_template('user.html', user_name=name)
 
 # Create custom Error Pages
 
@@ -45,16 +46,16 @@ def page_not_found(e):
 def page_not_found(e):
     return render_template('500.html'), 500
 
-@app.route('/name', methods=['GET', 'POST'])
-def name():
-    name = None
-    form = NamerForm()
-    # Validate Form
-    if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''  # clear it
-        flash("Form submitted successfully")
-    return render_template("name.html", name=name, form=form)
+# @app.route('/name', methods=['GET', 'POST'])
+# def name():
+#     name = None
+#     form = NamerForm()
+#     # Validate Form
+#     if form.validate_on_submit():
+#         name = form.name.data
+#         form.name.data = ''  # clear it
+#         flash("Form submitted successfully")
+#     return render_template("name.html", name=name, form=form)
 
 @app.route('/users/add', methods=['POST', 'GET'])
 def add_user():
@@ -89,8 +90,7 @@ def update_user(id):
                                     form=form,
                                    user_info=user_info,
                                    id=id)
-            # our_users = get_all_users()
-            # return render_template("add_user.html", form=form, name=name , our_users=our_users)
+
 
         except Exception as e:
             flash("Error ! ")
@@ -104,40 +104,47 @@ def update_user(id):
                                    user_info=user_info,
                                    id=id)
 @app.route('/delete/<int:id>')
+@login_required
 def delete_user(id):
-    name = None
-    form = UserForm()
-    user_info_to_delete = get_user_info(id)
-    try:
-        delete_user_from_db(user_info_to_delete)
-        flash("User deleted successfully")
-        our_users = get_all_users()
-        return render_template("add_user.html", form=form, name=name, our_users=our_users)
-        
-    except Exception as e:
-        flash("Erorr during deleting user.. Try again")
-        return render_template("add_user.html", form=form, name=name, our_users=our_users)
-# Create Password Test Page
-@app.route('/test_pw', methods=['GET', 'POST'])
-def test_pw():
-    email = None
-    password = None
-    checked_pw = None
-    passed = None
-    form = PasswordForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password_hash.data
-        form.email.data = ''
-        form.password_hash.data = ''
-        checked_pw = pw_to_chek_in_db(email)
-        if checked_pw and check_password_hash(checked_pw.password_hash, password):
-            passed = True
-        else:
-            passed = False
-            # flash("No user found with that email address or password is incorrect.")
+    if id == current_user.id:    
+        name = None
+        form = UserForm()
+        user_info_to_delete = get_user_info(id)
+        try:
+            delete_user_from_db(user_info_to_delete)
+            flash("User deleted successfully")
+            our_users = get_all_users()
+            return render_template("add_user.html", form=form, name=name, our_users=our_users)
+            
+        except Exception as e:
+            flash("Erorr during deleting user.. Try again")
+            return render_template("add_user.html", form=form, name=name, our_users=our_users)
+    else:
+        flash("Sorry, you can't delete that user..!")
+        return redirect(url_for('dashboard'))
 
-    return render_template("test_pw.html", email=email, password=password, form=form, checked_pw=checked_pw, passed=passed)
+
+# Create Password Test Page
+# @app.route('/test_pw', methods=['GET', 'POST'])
+# def test_pw():
+#     email = None
+#     password = None
+#     checked_pw = None
+#     passed = None
+#     form = PasswordForm()
+#     if form.validate_on_submit():
+#         email = form.email.data
+#         password = form.password_hash.data
+#         form.email.data = ''
+#         form.password_hash.data = ''
+#         checked_pw = pw_to_chek_in_db(email)
+#         if checked_pw and check_password_hash(checked_pw.password_hash, password):
+#             passed = True
+#         else:
+#             passed = False
+#             # flash("No user found with that email address or password is incorrect.")
+
+#     return render_template("test_pw.html", email=email, password=password, form=form, checked_pw=checked_pw, passed=passed)
 
 # Json Thing 
 @app.route('/date')
@@ -270,7 +277,6 @@ def dashboard():
         return render_template("dashboard.html",
                                     form=form,
                                    user_info=user_info)
-    # return render_template("dashboard.html")
     
 
 # Create Logout page
@@ -300,7 +306,7 @@ def base():
 # Create admin page
 @app.route('/admin')
 @login_required
-def admin():
+def admin(): 
     id = current_user.id
     if id == 19:
         pass

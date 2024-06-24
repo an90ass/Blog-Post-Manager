@@ -20,9 +20,14 @@
               <h5 class="card-title text-primary">  {{ post.title }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">By: {{ post.poster.name }}</h6>
                 <p class="card-text">{{ post.content|safe}}</p>
-                <p class="card-text">
-                    <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-                </p>
+                {% if post.poster.about_author %}
+                    <p class="card-text">
+                        <p class="card-text">About author: {{ post.poster.about_author|safe }}...</p>
+                    </p>
+                {% endif %}
+                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                <br/><br/>
+
                 <a href="{{ url_for('posts') }}" class="btn btn-outline-secondary btn-sm">Back To Blog </a>
                 {% if post.poster_id == current_user.id %}
                     <a href="{{ url_for('update_post',id=post.id) }}" class="btn btn-outline-primary btn-sm">Edite Post </a>

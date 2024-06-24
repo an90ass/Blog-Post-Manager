@@ -36,6 +36,8 @@ def update_user_in_db(form,user_info):
     user_info.name = form.name.data
     user_info.email = form.email.data
     user_info.favorite_color = form.favorite_color.data
+    user_info.about_author = form.about_author.data
+
     db.session.commit()
 def delete_user_from_db(user_info_to_delete):
     db.session.delete(user_info_to_delete)

@@ -146,6 +146,7 @@ To set up and run the Flask Blog Application, follow these steps:
 ## Development
    To run the application in development mode, ensure that the following configurations are set in 
      `app.py`:
+     ```bash
      app.config['ENV'] = 'development'
      app.config['DEBUG'] = True
 

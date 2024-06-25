@@ -20,8 +20,8 @@ db.init_app(app)  # Initialize the db with the app
 migrate.init_app(app,db)  # Initialize the migrate with the app
 login_manager.init_app(app) # Initialize the login_manager with the app
 ckeditor = CKEditor(app) # Initialize the CKEditor with the app
-# UPLOAD_FOLDER = 'static/images/'
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+UPLOAD_FOLDER = 'static/images/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -259,7 +259,7 @@ def dashboard():
     print(user_info)
     if request.method =="POST":
         try:
-            update_user_in_db(form,user_info)
+            update_user_in_db(form,user_info, app)
             # name = form.name.data =''
             flash("User updated successfully")
             return render_template("dashboard.html",

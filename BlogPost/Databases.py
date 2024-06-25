@@ -1,12 +1,11 @@
 # Databases.py
 
-from flask import  flash,request
+from flask import   flash,request
 from Models import Users, db,Posts
 from werkzeug.security import generate_password_hash,check_password_hash
 from werkzeug.utils import secure_filename
 import uuid as uuid
-# import os
-
+import os
 # UPLOAD_FOLDER = 'static/images/'
 
 def add_user_to_db(form):
@@ -36,24 +35,27 @@ def get_user_info(id):
     user_info = Users.query.get_or_404(id) 
     return user_info
 
-def update_user_in_db(form,user_info):
+def update_user_in_db(form,user_info,app):
     user_info.user_name = form.user_name.data
     user_info.name = form.name.data
     user_info.email = form.email.data
     user_info.favorite_color = form.favorite_color.data
     user_info.about_author = form.about_author.data
-    # user_info.profile_pic = request.files['profile_pic']
+    user_info.profile_pic = request.files['profile_pic']
 
-    # # Grab Image Name
-    # pic_filename = secure_filename(user_info.profile_pic.filename)
-    # # Set uuid
-    # uniqe_pic_name = str(uuid.uuid1()) + "_" + pic_filename
-    #     # Save that image 
-    # saver =  request.files['profile_pic']
-    # saver.save(os.path.join(UPLOAD_FOLDER),uniqe_pic_name)
-    # # change it to a string to save to db
-    # user_info.profile_pic = uniqe_pic_name
-    db.session.commit()
+    # Grab Image Name
+    pic_filename = secure_filename(user_info.profile_pic.filename)
+    # Set uuid
+    uniqe_pic_name = str(uuid.uuid1()) + "_" + pic_filename
+        # Save that image 
+    saver =  request.files['profile_pic']
+    # change it to a string to save to db
+    user_info.profile_pic = uniqe_pic_name
+    try:
+        saver.save(os.path.join(app.config['UPLOAD_FOLDER'],uniqe_pic_name))
+        db.session.commit()
+    except Exception as e:
+        print(e)
 def delete_user_from_db(user_info_to_delete):
     db.session.delete(user_info_to_delete)
     db.session.commit()    

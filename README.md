@@ -144,12 +144,10 @@ To set up and run the Flask Blog Application, follow these steps:
    flask run
 
 ## Development
-
-To run the application in development mode, ensure that the following configurations are set in `app.py`:
-
-```python
-app.config['ENV'] = 'development'
-app.config['DEBUG'] = True
+To run the application in development mode, ensure that the following configurations are set in `app.py`:   
+   ```python
+   app.config['ENV'] = 'development'
+   app.config['DEBUG'] = True
 
 ## Usage
   Once the application is running, you can access it via your web browser at http://localhost:5000. From there, you can create, edit, and delete blog posts using the provided forms.

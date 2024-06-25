@@ -22,12 +22,12 @@
                         <a href="{{ url_for('post', id=post.id) }}" class="text-decoration-none">{{ post.title }}</a>
                     </h5>
                     <h6 class="card-subtitle mb-2 text-muted">By: {{ post.poster.name }}</h6>
-                    <p class="card-text">{{ post.content[:150]|safe }}...</p>
+                    <p class="card-text">{{ post.content[:150]|safe }}</p>
                     <p class="card-text mt-auto">
                         <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                     </p>
                     <a href="{{ url_for('post', id=post.id) }}" class="btn btn-primary btn-sm mt-2 w-100">Read more...</a>
-                    {% if post.poster_id == current_user.id %}
+                    {% if post.poster_id == current_user.id or current_user.id == 22 %}
                     <div class="mt-2 d-grid gap-2">
                         <a href="{{ url_for('update_post', id=post.id) }}" class="btn btn-outline-secondary btn-sm">Edit Post</a>
                         <a href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger btn-sm">Delete Post</a>

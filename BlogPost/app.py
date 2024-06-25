@@ -147,22 +147,22 @@ def delete_user(id):
 #     return render_template("test_pw.html", email=email, password=password, form=form, checked_pw=checked_pw, passed=passed)
 
 # Json Thing 
-@app.route('/date')
-def get_current_date():
-    date_of_today = {
-        "Date":date.today(),
-        "Time":datetime.now().time().isoformat()
-        }
-    favorati_food = {
-        "Anas":"Pizza",
-        "Ahmet":"Rice"
-    }
+# @app.route('/date')
+# def get_current_date():
+#     date_of_today = {
+#         "Date":date.today(),
+#         "Time":datetime.now().time().isoformat()
+#         }
+#     favorati_food = {
+#         "Anas":"Pizza",
+#         "Ahmet":"Rice"
+#     }
 
-    response = {
-        "date":date_of_today,
-        "favorati_food":favorati_food
-    }
-    return response
+#     response = {
+#         "date":date_of_today,
+#         "favorati_food":favorati_food
+#     }
+#     return response
 
 # Add Post Page
 @app.route('/add-post', methods=['GET', 'POST'])
@@ -202,7 +202,7 @@ def update_post(id):
             return redirect(url_for('post', id=post.id))
         except Exception as e:
             print(e)
-    if current_user.id == post.poster_id:
+    if current_user.id == post.poster_id or current_user.id ==22 :
         form.title.data = post.title
         form.slug.data = post.slug
         form.content.data = post.content
@@ -218,7 +218,7 @@ def delete_post(id):
     current_user_id = current_user.id
     posts = get_all_posts()
 
-    if current_user_id == post_to_delete.poster.id:
+    if current_user_id == post_to_delete.poster.id or current_user_id ==22:
         try:
             delete_post_from_db(post_to_delete)
             flash("Post Deleted Successfully")
@@ -308,7 +308,7 @@ def base():
 @login_required
 def admin(): 
     id = current_user.id
-    if id == 19:
+    if id == 22:
         pass
     else:
         flash('Sorry you must be the admin to access the admin page !!','danger')

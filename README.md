@@ -103,6 +103,45 @@ This Flask Blog Application is designed to provide users with the ability to cre
 - `Databases.py`: Contains database-related configurations and operations.
 - `Models.py`: Defines the database models used in the application.
 - `WebForms.py`: Contains form definitions used for creating and editing blog posts.
+  
+  flask-blog-app/
+├── app.py
+├── config.py
+├── requirements.txt
+├── run.py
+├── /instance
+│   └── config.py
+├── /migrations
+├── /templates
+│   ├── base.html
+│   ├── home.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── add_user.html
+│   ├── update_user.html
+│   ├── add_post.html
+│   ├── view_posts.html
+│   ├── view_single_post.html
+│   ├── edit_post.html
+│   ├── delete_post.html
+│   ├── admin.html
+│   ├── 404.html
+│   ├── 500.html
+│   └── search.html
+├── /static
+│   ├── /css
+│   ├── /js
+│   └── /images
+├── /models
+│   ├── user.py
+│   ├── post.py
+│   └── __init__.py
+└── /forms
+    ├── login_form.py
+    ├── user_form.py
+    ├── post_form.py
+    └── __init__.py
+
 
 ## Installation
 

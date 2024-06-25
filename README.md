@@ -119,11 +119,11 @@ To set up and run the Flask Blog Application, follow these steps:
     python -m venv venv
 3. **Activate the virtual environment**:
    - On Windows:
-    bash    
+   '''bash    
     venv\Scripts\activate
 
   - On macOS/Linux:
-    bash
+    '''bash
     source venv/bin/activate
 4. **Install dependencies**:
     ```bash

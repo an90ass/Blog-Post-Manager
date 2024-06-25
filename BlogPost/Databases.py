@@ -41,21 +41,26 @@ def update_user_in_db(form,user_info,app):
     user_info.email = form.email.data
     user_info.favorite_color = form.favorite_color.data
     user_info.about_author = form.about_author.data
-    user_info.profile_pic = request.files['profile_pic']
 
-    # Grab Image Name
-    pic_filename = secure_filename(user_info.profile_pic.filename)
-    # Set uuid
-    uniqe_pic_name = str(uuid.uuid1()) + "_" + pic_filename
-        # Save that image 
-    saver =  request.files['profile_pic']
-    # change it to a string to save to db
-    user_info.profile_pic = uniqe_pic_name
-    try:
-        saver.save(os.path.join(app.config['UPLOAD_FOLDER'],uniqe_pic_name))
+    # Chek for profile pic
+    if request.files['profile_pic']:
+        user_info.profile_pic = request.files['profile_pic']
+        # Grab Image Name
+        pic_filename = secure_filename(user_info.profile_pic.filename)
+        # Set uuid
+        uniqe_pic_name = str(uuid.uuid1()) + "_" + pic_filename
+            # Save that image 
+        saver =  request.files['profile_pic']
+        # change it to a string to save to db
+        user_info.profile_pic = uniqe_pic_name
+        try:
+            saver.save(os.path.join(app.config['UPLOAD_FOLDER'],uniqe_pic_name))
+            db.session.commit()
+        except Exception as e:
+            print(e)
+    else:
         db.session.commit()
-    except Exception as e:
-        print(e)
+        
 def delete_user_from_db(user_info_to_delete):
     db.session.delete(user_info_to_delete)
     db.session.commit()    

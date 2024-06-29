@@ -7,12 +7,12 @@ from datetime import date, datetime
 from flask_login import login_user,login_required,logout_user,current_user
 from flask_ckeditor import CKEditor
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "hi"
+app.config['SECRET_KEY'] = "your_secret_key_here"
 # Old SQLITE DB
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 # NEW MYSQL DB
 #'mysql:///username:password@localhost/db_name'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://anass:4923an90as@localhost/flask_users'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@localhost/db_name'  # Update with your database URI
 app.config['ENV'] = 'development'
 app.config['DEBUG'] = True
 
